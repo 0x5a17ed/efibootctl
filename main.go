@@ -15,6 +15,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"os"
 
@@ -40,11 +41,22 @@ func mainE() (err error) {
 
 	p := printer.NewPrinter("", printer.DefaultScheme, true, true, true)
 
+	// Report BootNext value.
+	_, bootNext, err := efivars.BootNext.Get(c)
+	if err != nil {
+		if !errors.Is(err, efivario.ErrNotFound) {
+			return err
+		}
+		// Ignore efivario.ErrNotFound errors.
+	} else {
+		p.PrintFieldValue("BootNext", BootIndex(bootNext))
+	}
+
+	// Report BootCurrent value.
 	_, bootCurrent, err := efivars.BootCurrent.Get(c)
 	if err != nil {
 		return err
 	}
-
 	p.PrintFieldValue("BootCurrent", BootIndex(bootCurrent))
 
 	// TODO: implement timeout value in uefi package.
