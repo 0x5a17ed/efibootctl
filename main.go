@@ -26,7 +26,7 @@ import (
 	"github.com/0x5a17ed/uefi/efi/efivars"
 	"go.uber.org/multierr"
 
-	"github.com/0x5a17ed/efibootcfg/printer"
+	"github.com/0x5a17ed/efibootctl/printer"
 )
 
 type BootIndex uint16

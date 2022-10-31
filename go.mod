@@ -1,4 +1,4 @@
-module github.com/0x5a17ed/efibootcfg
+module github.com/0x5a17ed/efibootctl
 
 go 1.18
 
