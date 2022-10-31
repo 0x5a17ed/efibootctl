@@ -90,7 +90,7 @@ func mainE() (err error) {
 
 func main() {
 	if err := RunWithPrivileges(mainE); err != nil {
-		fmt.Printf("error: %s", err.Error())
+		fmt.Printf("error: %s\n", err.Error())
 		os.Exit(1)
 	}
 }
