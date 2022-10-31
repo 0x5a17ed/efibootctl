@@ -83,7 +83,7 @@ func mainE() (err error) {
 		return
 	})
 
-	fmt.Fprint(printer.DefaultOut, p.String())
+	_, _ = fmt.Fprint(printer.DefaultOut, p.String())
 
 	return nil
 }
