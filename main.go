@@ -18,9 +18,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/0x5a17ed/iterkit"
-	"github.com/0x5a17ed/iterkit/itertools"
-	"github.com/0x5a17ed/uefi/efi/efireader"
+	"github.com/0x5a17ed/itkit/iters/sliceit"
+	"github.com/0x5a17ed/itkit/itlib"
 	"github.com/0x5a17ed/uefi/efi/efitypes"
 	"github.com/0x5a17ed/uefi/efi/efivario"
 	"github.com/0x5a17ed/uefi/efi/efivars"
@@ -55,8 +54,8 @@ func mainE() (err error) {
 		return err
 	}
 
-	p.PrintFieldValue("BootOrder", itertools.Slice(itertools.Map(
-		iterkit.From(bootOrder), func(v uint16) BootIndex { return BootIndex(v) },
+	p.PrintFieldValue("BootOrder", sliceit.To(itlib.Map(
+		sliceit.In(bootOrder), func(v uint16) BootIndex { return BootIndex(v) },
 	)))
 
 	it, err := efivars.BootIterator(c)
@@ -65,8 +64,12 @@ func mainE() (err error) {
 	}
 	defer multierr.AppendInvoke(&err, multierr.Close(it))
 
-	itertools.Each[*efivars.BootEntry](it, func(be *efivars.BootEntry) (abort bool) {
-		_, lo, _ := be.Variable.Get(c)
+	itlib.Apply(it.Iter(), func(be *efivars.BootEntry) {
+		_, lo, err := be.Variable.Get(c)
+		if err != nil {
+			_, _ = fmt.Fprintf(os.Stderr, "error: %s\n", err)
+			return
+		}
 
 		var isActive string
 		if lo.Attributes&efitypes.ActiveAttribute != 0 {
@@ -75,7 +78,8 @@ func mainE() (err error) {
 
 		p.PrintFieldValue(
 			fmt.Sprintf("Boot%04X%s", be.Index, isActive),
-			efireader.UTF16NullBytesToString(lo.Description))
+			lo.DescriptionString(),
+		)
 		return
 	})
 
