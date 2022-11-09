@@ -1,4 +1,4 @@
-// Copyright (c) 2022 individual contributors
+// Copyright (c) 2022 individual contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,14 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-//go:build windows
-
 package main
 
 import (
-	"github.com/Microsoft/go-winio"
+	"os"
+
+	"github.com/0x5a17ed/efibootctl/pkg/efibootctl"
 )
 
-func RunWithPrivileges(cb func() error) error {
-	return winio.RunWithPrivilege("SeSystemEnvironmentPrivilege", cb)
+func main() {
+	efibootctl.Run(os.Args[0], os.Args[1:])
 }

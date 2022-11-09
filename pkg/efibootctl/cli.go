@@ -1,4 +1,4 @@
-// Copyright (c) 2022 individual contributors
+// Copyright (c) 2022 individual contributors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package main
+package efibootctl
 
 import (
 	"errors"
@@ -26,7 +26,7 @@ import (
 	"github.com/0x5a17ed/uefi/efi/efivars"
 	"go.uber.org/multierr"
 
-	"github.com/0x5a17ed/efibootctl/printer"
+	"github.com/0x5a17ed/efibootctl/pkg/printer"
 )
 
 type BootIndex uint16
@@ -100,7 +100,7 @@ func mainE() (err error) {
 	return nil
 }
 
-func main() {
+func Run(binName string, args []string) {
 	if err := RunWithPrivileges(mainE); err != nil {
 		fmt.Printf("error: %s\n", err.Error())
 		os.Exit(1)
